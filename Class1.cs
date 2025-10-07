@@ -29,13 +29,19 @@ namespace readinguser {
                 chunks.Add( chunk );
             }
             for (int i = 0; i < chunks.Count; i++) {
-                string filename = $"chunk_{i}.txt";
+                string filename = $"chunk_{i+1}.txt";
                 File.WriteAllText( filename, chunks[i] );
            //     Console.WriteLine($"CHUNKS{filename} stored successfully");
             }
             Console.WriteLine("ALL CHUNKS RESPECTIVE TEXT FILES CREATED SUCCESSFULLY");
             string[] chunkfiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "chunk_*.txt");
-            Array.Sort(chunkfiles);
+            Array.Sort(chunkfiles, (a, b) =>
+            {
+                int numA = int.Parse(Path.GetFileNameWithoutExtension(a).Split('_')[1]);
+                int numB = int.Parse(Path.GetFileNameWithoutExtension(b).Split('_')[1]);
+                return numA.CompareTo(numB);
+            });
+
             string reconstructed = "";
             foreach(string file in chunkfiles)
             {
